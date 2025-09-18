@@ -1,17 +1,17 @@
-import React from "react";
+﻿import React from "react";
 
-const Card = ({ title, subtitle, children, actions }) => (
-  <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+const Card = ({ title, subtitle, children, actions, className = "" }) => (
+  <section className={`glass relative z-10 rounded-2xl p-6 text-black shadow-glass ${className}`}>
     {(title || actions) && (
-      <header className="mb-4 flex items-start justify-between gap-4">
+      <header className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          {title && <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>}
-          {subtitle && <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>}
+          {title && <h2 className="text-xl font-semibold text-black">{title}</h2>}
+          {subtitle && <p className="mt-1 text-sm text-black">{subtitle}</p>}
         </div>
-        {actions}
+        {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </header>
     )}
-    {children}
+    <div className="text-sm text-black">{children}</div>
   </section>
 );
 

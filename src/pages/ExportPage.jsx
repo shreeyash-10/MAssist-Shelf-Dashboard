@@ -47,7 +47,7 @@ const ExportPage = () => {
       subtitle="Download raw image recognition results filtered by date, store, user, or SKU."
       actions={
         <div className="flex items-center gap-2">
-          <Button variant="soft">
+          <Button variant="secondary">
             <Icon.calendar className="h-4 w-4" />
           </Button>
           <Button variant="primary" className="gap-2">
@@ -58,7 +58,7 @@ const ExportPage = () => {
     >
       <div className="mb-3 flex flex-wrap gap-2">
         {["Store", "Location", "User"].map((filter) => (
-          <Button key={filter} variant="soft" className="gap-1">
+          <Button key={filter} variant="secondary" className="gap-1">
             {filter} <Icon.chevronDown className="h-4 w-4" />
           </Button>
         ))}

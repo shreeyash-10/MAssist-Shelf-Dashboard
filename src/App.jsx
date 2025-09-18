@@ -10,13 +10,17 @@ import SubmissionsPage from "./pages/SubmissionsPage";
 import TrainingPage from "./pages/TrainingPage";
 import UsersPage from "./pages/UsersPage";
 import SkuBrandsPage from "./pages/SkuBrandsPage";
+import SkuTrainingPage from "./pages/SkuTrainingPage";
+import TrainingUploadPage from "./pages/TrainingUploadPage";
 
 const pageComponents = {
   dashboard: DashboardPage,
   users: UsersPage,
   submissions: SubmissionsPage,
   training: TrainingPage,
+  trainingUpload: TrainingUploadPage,
   sku: SkuBrandsPage,
+  skuTraining: SkuTrainingPage,
   storeByStore: StoreByStorePage,
   export: ExportPage,
   planogram: PlanogramPage,
@@ -25,6 +29,8 @@ const pageComponents = {
 const App = () => {
   const [authed, setAuthed] = useState(false);
   const [page, setPage] = useState("dashboard");
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedSku, setSelectedSku] = useState(null);
 
   if (!authed) {
     return (
@@ -39,7 +45,14 @@ const App = () => {
   return (
     <ThemeProvider>
       <AppLayout page={page} setPage={setPage}>
-        <CurrentPage />
+        <CurrentPage
+          page={page}
+          setPage={setPage}
+          selectedBrand={selectedBrand}
+          setSelectedBrand={setSelectedBrand}
+          selectedSku={selectedSku}
+          setSelectedSku={setSelectedSku}
+        />
       </AppLayout>
     </ThemeProvider>
   );

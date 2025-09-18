@@ -1,18 +1,25 @@
-import React from "react";
+﻿import React from "react";
 
-const Button = ({ children, variant = "primary", className = "", ...rest }) => {
-  const base = "inline-flex items-center justify-center gap-2 rounded-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900";
-  const styles = {
-    primary: `${base} bg-red-600 px-4 py-2 text-white hover:bg-red-700 active:bg-red-800`,
-    outline: `${base} border border-gray-300 bg-white px-3 py-2 text-gray-800 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700`,
-    ghost: `${base} px-2.5 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800`,
-    soft: `${base} bg-gray-100 px-3 py-1.5 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700`,
-  };
+const variantMap = {
+  primary: "bg-brand-100 hover:bg-brand-200 active:bg-brand-200 text-black shadow-glass",
+  secondary: "glass text-black hover:bg-black/5 transition-colors border border-black/15",
+  ghost: "text-black hover:text-black/70",
+  link: "text-black underline underline-offset-4 hover:text-black/70",
+};
 
-  const style = styles[variant] || styles.primary;
+const aliasMap = {
+  outline: "secondary",
+  soft: "secondary",
+};
+
+const Button = ({ children, className = "", variant = "primary", type = "button", ...rest }) => {
+  const resolvedVariant = aliasMap[variant] || variant;
+  const variantClasses = variantMap[resolvedVariant] || variantMap.primary;
+
+  const base = "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold tracking-tight transition duration-200 ease-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-60";
 
   return (
-    <button className={`${style} ${className}`.trim()} {...rest}>
+    <button type={type} className={`${base} ${variantClasses} ${className}`.trim()} {...rest}>
       {children}
     </button>
   );

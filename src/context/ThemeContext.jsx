@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-export const ThemeContext = React.createContext({ theme: "light", setTheme: () => {} });
+export const ThemeContext = React.createContext({ theme: "dark", setTheme: () => {} });
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useLocalStorage("massist-theme", "light");
+  const [theme, setTheme] = useLocalStorage("indus-theme", "dark");
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
+    root.classList.remove("dark");
+    if (theme === "light") {
+      root.classList.add("theme-light");
     } else {
-      root.classList.remove("dark");
+      root.classList.remove("theme-light");
     }
   }, [theme]);
 

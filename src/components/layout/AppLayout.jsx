@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
-import ThemeToggle from "../ThemeToggle";
+﻿import React, { useEffect, useState } from "react";
 import Logo from "../branding/Logo";
 import { Icon } from "../icons";
 import { Button } from "../ui";
+import VoiceWaveBg from "../background/VoiceWaveBg";
+import useRevealAnimation from "../../hooks/useRevealAnimation";
 
 const navItems = [
-  { key: "dashboard", label: "Dashboard", icon: "??" },
-  { key: "users", label: "Users", icon: "??" },
-  { key: "submissions", label: "Submissions", icon: "???" },
-  { key: "training", label: "Training", icon: "??" },
-  { key: "sku", label: "SKU", icon: "???" },
-  { key: "storeByStore", label: "Store-by-Store", icon: "??" },
-  { key: "export", label: "Export", icon: "??" },
-  { key: "planogram", label: "Planogram", icon: "???" },
+  { key: "dashboard", label: "Dashboard" },
+  { key: "users", label: "Users" },
+  { key: "submissions", label: "Submissions" },
+  { key: "training", label: "Training" },
+  { key: "sku", label: "SKU" },
+  { key: "storeByStore", label: "Store-by-Store" },
+  { key: "export", label: "Export" },
+  { key: "planogram", label: "Planogram" },
 ];
 
 const AppLayout = ({ page, setPage, children }) => {
+  useRevealAnimation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -30,32 +32,38 @@ const AppLayout = ({ page, setPage, children }) => {
     return () => window.removeEventListener("keydown", onEsc);
   }, []);
 
-  const NavButton = ({ item }) => (
-    <button
-      onClick={() => {
-        setPage(item.key);
-        setSidebarOpen(false);
-      }}
-      className={lex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium }
-      aria-current={page === item.key ? "page" : undefined}
-    >
-      <span className="text-lg" aria-hidden="true">
-        {item.icon}
-      </span>
-      {item.label}
-    </button>
-  );
+  const NavButton = ({ item }) => {
+    const isActive = page === item.key;
+    return (
+      <button
+        onClick={() => {
+          setPage(item.key);
+          setSidebarOpen(false);
+        }}
+        className={`group flex w-full items-center gap-3 rounded-xl px-4 py-2 text-left text-sm font-medium transition duration-200 ease-brand ${
+          isActive ? "bg-black/15 text-black" : "hover:bg-black/10"
+        }`}
+        aria-current={isActive ? "page" : undefined}
+      >
+        <span className="text-lg" aria-hidden="true">
+          •
+        </span>
+        {item.label}
+      </button>
+    );
+  };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="relative flex min-h-screen text-black">
+      <VoiceWaveBg />
       <aside
-        className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 md:block"
-        aria-label="Primary"
+        className="glass sticky top-0 hidden h-screen w-64 shrink-0 border border-black/12 bg-white px-4 pb-6 pt-4 md:block"
+        aria-label="Primary navigation"
       >
-        <div className="flex h-16 items-center gap-2 px-4">
+        <div className="flex h-16 items-center gap-3">
           <Logo />
         </div>
-        <nav className="mt-4 space-y-1 px-3">
+        <nav className="mt-6 space-y-1">
           {navItems.map((item) => (
             <NavButton key={item.key} item={item} />
           ))}
@@ -63,54 +71,54 @@ const AppLayout = ({ page, setPage, children }) => {
       </aside>
 
       {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black/40 md:hidden" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm md:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      <aside
-        className={ixed inset-y-0 left-0 z-50 w-72 border-r border-gray-200 bg-white p-4 transition-transform duration-200 dark:border-gray-800 dark:bg-gray-900 md:hidden }
-      >
-        <div className="mb-3 flex h-12 items-center justify-between">
-          <Logo />
-          <Button variant="ghost" onClick={() => setSidebarOpen(false)} aria-label="Close menu">
-            �
-          </Button>
-        </div>
-        <nav className="space-y-1">
-          {navItems.map((item) => (
-            <NavButton key={item.key} item={item} />
-          ))}
-        </nav>
-      </aside>
+      {sidebarOpen && (
+        <aside className="glass fixed inset-y-0 left-0 z-40 w-72 border border-black/12 bg-white p-5 transition duration-200 ease-brand md:hidden">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <Logo />
+            <Button variant="ghost" onClick={() => setSidebarOpen(false)} aria-label="Close navigation">
+              Close
+            </Button>
+          </div>
+          <nav className="space-y-1">
+            {navItems.map((item) => (
+              <NavButton key={item.key} item={item} />
+            ))}
+          </nav>
+        </aside>
+      )}
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-gray-200 bg-gray-900/95 px-4 text-white backdrop-blur dark:border-gray-800">
-          <button className="md:hidden" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
+      <div className="relative z-20 flex min-w-0 flex-1 flex-col">
+        <header className="glass sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-black/12 bg-white/90 px-4 backdrop-blur-xl sm:h-16 sm:px-6">
+          <button className="md:hidden" onClick={() => setSidebarOpen(true)} aria-label="Open navigation">
             <Icon.menu className="h-6 w-6" />
           </button>
-          <div className="relative mx-auto w-full max-w-xl">
-            <Icon.search className="pointer-events-none absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+          <div className="hidden items-center gap-3 md:flex">
+            <Logo />
+          </div>
+          <div className="relative ml-auto w-full max-w-xl">
+            <Icon.search className="pointer-events-none absolute left-4 top-2.5 h-4 w-4" />
             <input
               placeholder="Search here..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-lg border border-gray-700 bg-gray-800 py-2 pl-10 pr-4 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full rounded-full border border-black/15 bg-white py-2 pl-10 pr-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
               role="searchbox"
               aria-label="Search"
             />
           </div>
-          <div className="ml-auto flex items-center gap-2">
-            <ThemeToggle />
-            <div className="flex items-center gap-2 rounded-full bg-gray-800 px-2 py-1 text-sm" aria-label="Model health">
-              <span>62%</span>
-            </div>
-            <img
-              src="https://api.dicebear.com/9.x/identicon/svg?seed=massist"
-              alt="avatar"
-              className="h-8 w-8 rounded-full bg-white"
-            />
+          <div className="ml-4 flex items-center gap-3">
+            <button className="text-sm font-semibold" aria-label="Sign in">
+              Sign in
+            </button>
+            <Button aria-label="Start free trial">Start free</Button>
           </div>
         </header>
-        <main className="mx-auto w-full max-w-7xl flex-1 p-4 md:p-6">{children}</main>
+        <main className="mx-auto w-full max-w-7xl flex-1 space-y-6 px-4 py-6 md:px-6">
+          {children}
+        </main>
       </div>
     </div>
   );

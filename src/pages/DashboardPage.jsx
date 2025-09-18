@@ -1,7 +1,7 @@
-import React from "react";
+ï»¿import React from "react";
 import { Icon } from "../components/icons";
 import { Button, Card } from "../components/ui";
-import BarChart from "../components/charts/BarChart";
+import MiniTrendChart from "../components/charts/MiniTrendChart";
 import Kpi from "../components/dashboard/Kpi";
 import StoreTable from "../components/dashboard/StoreTable";
 
@@ -20,11 +20,11 @@ const DashboardPage = () => {
         title="Shelf Performance Overview"
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="soft" className="gap-1">
-              <span className="text-sm">Dec 20 – Dec 31</span>
+            <Button variant="secondary" className="gap-1">
+              <span className="text-sm">Dec 20 - Dec 31</span>
               <Icon.calendar className="h-4 w-4" />
             </Button>
-            <Button variant="soft" className="gap-1">
+            <Button variant="secondary" className="gap-1">
               This Week <Icon.chevronDown className="h-4 w-4" />
             </Button>
           </div>
@@ -35,7 +35,22 @@ const DashboardPage = () => {
           <Kpi title="SoS %" value="47%" delta="-3.4%" negative />
           <Kpi title="Planogram Compliance (PGC) %" value="88%" delta="+2.1%" />
         </div>
-        <BarChart data={data} />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {["OSA MoM", "SoS MoM", "PGC MoM"].map((title, index) => {
+            const metric = index === 0 ? "osa" : index === 1 ? "sos" : "pgc";
+            const color = index === 0 ? "var(--color-brand-300)" : index === 1 ? "var(--color-brand-200)" : "var(--color-brand-400)";
+            return (
+              <div key={title} data-reveal className="glass rounded-2xl border border-white/12 bg-white/8 p-5 opacity-0">
+                <div className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-black">{title}</div>
+                <MiniTrendChart
+                  label={`${title} trend`}
+                  color={color}
+                  data={data.map((d) => ({ label: d.month, value: d[metric] }))}
+                />
+              </div>
+            );
+          })}
+        </div>
       </Card>
 
       <Card
@@ -49,3 +64,4 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+

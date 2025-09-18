@@ -28,7 +28,7 @@ const BarChart = ({ data }) => {
             ].map((legend, legendIndex) => (
               <g key={legend.label} transform={`translate(${legendIndex * 80},0)`}>
                 <rect width="14" height="14" rx="2" fill={legend.fill} />
-                <text x="20" y="12" className="fill-gray-600 dark:fill-gray-300 text-[12px]">
+                <text x="20" y="12" className="fill-gray-600 text-[12px]">
                   {legend.label}
                 </text>
               </g>
@@ -65,7 +65,7 @@ const BarChart = ({ data }) => {
                   x={x + barWidth / 2}
                   y={height - 4}
                   textAnchor="middle"
-                  className="fill-gray-500 dark:fill-gray-400 text-[10px]"
+                  className="fill-gray-500 text-[10px]"
                 >
                   {entry.month}
                 </text>

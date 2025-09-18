@@ -1,10 +1,14 @@
-import React, { useMemo, useState } from "react";
+﻿import React, { useMemo, useState } from "react";
 import { Card } from "../components/ui";
 import SortableTable from "../components/tables/SortableTable";
 
 const StoreByStorePage = () => {
   const [region, setRegion] = useState("All");
   const [city, setCity] = useState("All");
+  const [query, setQuery] = useState("");
+  const [minOsa, setMinOsa] = useState(0);
+  const [minSos, setMinSos] = useState(0);
+  const [minPgc, setMinPgc] = useState(0);
 
   const regions = ["All", "North", "South", "East", "West", "Central"];
   const cities = ["All", "Mumbai", "Delhi", "Bengaluru", "Kolkata", "Chennai", "Pune", "Jaipur"];
@@ -25,16 +29,18 @@ const StoreByStorePage = () => {
   const filtered = allStores.filter(
     (store) =>
       (region === "All" || store.region === region) &&
-      (city === "All" || store.city === city)
+      (city === "All" || store.city === city) &&
+      (query === "" || store.store.toLowerCase().includes(query.toLowerCase())) &&
+      store.osa >= minOsa && store.sos >= minSos && store.pgc >= minPgc
   );
 
   const columns = [
     { key: "store", header: "Store" },
     { key: "city", header: "City" },
     { key: "region", header: "Region" },
-    { key: "osa", header: "OSA %", render: (value) => ${value.toFixed(1)}% },
-    { key: "sos", header: "SoS %", render: (value) => ${value.toFixed(1)}% },
-    { key: "pgc", header: "PGC %", render: (value) => ${value.toFixed(1)}% },
+    { key: "osa", header: "OSA %", render: (value) => `${value.toFixed(1)}%` },
+    { key: "sos", header: "SoS %", render: (value) => `${value.toFixed(1)}%` },
+    { key: "pgc", header: "PGC %", render: (value) => `${value.toFixed(1)}%` },
   ];
 
   return (
@@ -42,11 +48,17 @@ const StoreByStorePage = () => {
       title="Store-by-Store"
       subtitle="Browse all stores with regional and city filters."
       actions={
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            placeholder="Search store..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            className="w-48 rounded-full border border-black/15 bg-white px-4 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+          />
           <select
             value={region}
             onChange={(event) => setRegion(event.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className="rounded-full border border-black/15 bg-white px-4 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
           >
             {regions.map((r) => (
               <option key={r} value={r}>
@@ -57,7 +69,7 @@ const StoreByStorePage = () => {
           <select
             value={city}
             onChange={(event) => setCity(event.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className="rounded-full border border-black/15 bg-white px-4 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
           >
             {cities.map((c) => (
               <option key={c} value={c}>
@@ -65,6 +77,39 @@ const StoreByStorePage = () => {
               </option>
             ))}
           </select>
+          <div className="flex items-center gap-2 text-sm">
+            <span>OSA ≥</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={minOsa}
+              onChange={(event) => setMinOsa(Number(event.target.value) || 0)}
+              className="w-20 rounded-full border border-black/15 bg-white px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            />
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <span>SoS ≥</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={minSos}
+              onChange={(event) => setMinSos(Number(event.target.value) || 0)}
+              className="w-20 rounded-full border border-black/15 bg-white px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            />
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <span>PGC ≥</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={minPgc}
+              onChange={(event) => setMinPgc(Number(event.target.value) || 0)}
+              className="w-20 rounded-full border border-black/15 bg-white px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            />
+          </div>
         </div>
       }
     >
